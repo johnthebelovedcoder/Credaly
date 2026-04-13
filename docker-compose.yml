@@ -1,0 +1,79 @@
+# Docker Compose — local development environment.
+# Starts both services + shared SQLite database + Redis.
+
+services:
+  # ── Shared Database (PostgreSQL for production-like dev) ──────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: credaly
+      POSTGRES_USER: credaly
+      POSTGRES_PASSWORD: credaly_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U credaly"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis (feature store online + caching + rate limiting) ────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Scoring API (Python FastAPI) ──────────────────────────────────
+  scoring-api:
+    build:
+      context: ./services/scoring-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./credaly.db
+      REDIS_URL: redis://redis:6379/0
+      HMAC_SECRET_KEY: dev-hmac-secret-key-change-in-production
+      CONSENT_SIGNING_SECRET: dev-consent-signing-secret-change-in-production
+      BVN_ENCRYPTION_KEY: dev-bvn-encryption-key-change-in-production
+      ENVIRONMENT: development
+      DEBUG: "true"
+    volumes:
+      - ./services/scoring-api:/app
+      - scoring_api_data:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # ── Admin API (NestJS TypeScript) ─────────────────────────────────
+  admin-api:
+    build:
+      context: ./services/admin-api
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      DB_TYPE: better-sqlite3
+      DB_DATABASE: /data/credaly.db
+    volumes:
+      - ./services/admin-api:/app
+      - scoring_api_data:/data  # Shared DB with scoring API
+    depends_on:
+      - scoring-api
+    command: npm run start:dev
+
+volumes:
+  postgres_data:
+  redis_data:
+  scoring_api_data:

@@ -1,0 +1,24 @@
+{
+  "name": "credaly-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Predictive Behavioral Credit & Insurance Platform",
+  "workspaces": [
+    "services/admin-api"
+  ],
+  "scripts": {
+    "dev:admin": "npm run start:dev --workspace=services/admin-api",
+    "build:admin": "npm run build --workspace=services/admin-api",
+    "test:admin": "npm run test --workspace=services/admin-api",
+    "dev:python": "cd services/scoring-api && python -m uvicorn src.main:app --reload --host 0.0.0.0 --port 8000",
+    "dev": "concurrently \"npm run dev:python\" \"npm run dev:admin\"",
+    "lint:admin": "npm run lint --workspace=services/admin-api"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "json5": "^2.2.3"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
