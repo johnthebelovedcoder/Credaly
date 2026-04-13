@@ -27,13 +27,13 @@ export class UserEntity {
   lastName: string;
 
   @Column({
-    type: 'enum',
-    enum: UserRole,
+    type: 'varchar',
+    length: 20,
     default: UserRole.ANALYST,
   })
   role: UserRole;
 
-  @Column({ default: true })
+  @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
 
   @Column({ name: 'last_login_at', type: 'datetime', nullable: true })

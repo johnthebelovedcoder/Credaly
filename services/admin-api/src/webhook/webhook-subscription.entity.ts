@@ -8,19 +8,19 @@ export class WebhookSubscriptionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'client_id' })
+  @Column({ name: 'client_id', type: 'varchar', length: 36 })
   clientId: string;
 
-  @Column({ name: 'url' })
+  @Column({ name: 'url', type: 'varchar', length: 500 })
   url: string;
 
   @Column({ name: 'events', type: 'text' }) // JSON array
   events: string;
 
-  @Column({ name: 'secret', nullable: true })
+  @Column({ name: 'secret', type: 'varchar', length: 128, nullable: true })
   secret: string | null; // HMAC secret for signature
 
-  @Column({ name: 'description', nullable: true })
+  @Column({ name: 'description', type: 'varchar', length: 500, nullable: true })
   description: string | null;
 
   @Column({ default: true })

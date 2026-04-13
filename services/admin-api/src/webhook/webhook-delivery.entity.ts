@@ -8,16 +8,16 @@ export class WebhookDeliveryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'subscription_id' })
+  @Column({ name: 'subscription_id', type: 'varchar', length: 36 })
   subscriptionId: string;
 
-  @Column({ name: 'event_type' })
+  @Column({ name: 'event_type', type: 'varchar', length: 50 })
   eventType: string;
 
   @Column({ name: 'payload', type: 'text' }) // JSON payload
   payload: string;
 
-  @Column({ name: 'response_status', nullable: true })
+  @Column({ name: 'response_status', type: 'integer', nullable: true })
   responseStatus: number;
 
   @Column({ name: 'response_body', type: 'text', nullable: true })

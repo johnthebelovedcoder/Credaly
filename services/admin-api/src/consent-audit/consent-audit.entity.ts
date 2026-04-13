@@ -8,22 +8,22 @@ export class ConsentAuditEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'consent_id' })
+  @Column({ name: 'consent_id', type: 'varchar', length: 36 })
   consentId: string;
 
-  @Column({ name: 'event_type' })
+  @Column({ name: 'event_type', type: 'varchar', length: 50 })
   eventType: string;
 
   @Column({ name: 'timestamp', type: 'datetime' })
   timestamp: Date;
 
-  @Column({ name: 'ip_address', nullable: true })
+  @Column({ name: 'ip_address', type: 'varchar', length: 45, nullable: true })
   ipAddress: string;
 
-  @Column({ name: 'user_agent', nullable: true })
+  @Column({ name: 'user_agent', type: 'varchar', length: 500, nullable: true })
   userAgent: string;
 
-  @Column({ name: 'actor_id', nullable: true })
+  @Column({ name: 'actor_id', type: 'varchar', length: 36, nullable: true })
   actorId: string;
 
   @Column({ name: 'previous_row_hash' })
