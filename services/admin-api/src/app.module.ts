@@ -31,7 +31,7 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: configService.get<string>('DB_TYPE', 'better-sqlite3') as any,
+        type: 'sqlite',
         database: configService.get<string>('DB_DATABASE', './credaly.db'),
         // For PostgreSQL in production:
         // type: 'postgres',

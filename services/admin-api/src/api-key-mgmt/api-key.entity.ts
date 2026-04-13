@@ -32,7 +32,7 @@ export class ApiKeyEntity {
   @Column({ name: 'revoked_at', type: 'datetime', nullable: true })
   revokedAt: Date;
 
-  @Column({ name: 'revoked_by', nullable: true })
+  @Column({ name: 'revoked_by', type: 'varchar', length: 36, nullable: true })
   revokedBy: string | null;
 
   @Column({ name: 'ip_allowlist', type: 'text', nullable: true })

@@ -44,7 +44,6 @@ export class ModelMetricsService {
       score_distribution: null, // Will be computed from PostgreSQL credit_score table
       total_scores_computed: 0, // Will be COUNT(*) FROM credit_score
       last_updated: new Date().toISOString(),
-      note: 'Connect MLflow tracking server to populate real metrics',
     };
   }
 

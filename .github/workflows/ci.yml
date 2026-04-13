@@ -1,6 +1,4 @@
-"""
-GitHub Actions CI/CD pipeline — build, test, lint, security scan, and deploy.
-"""
+# GitHub Actions CI/CD pipeline — build, test, lint, security scan, and deploy.
 
 name: CI/CD
 
