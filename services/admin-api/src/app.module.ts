@@ -41,9 +41,9 @@ import { AuthModule } from './auth/auth.module';
         // password: configService.get<string>('DB_PASSWORD'),
         // database: configService.get<string>('DB_NAME', 'credaly'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        // IMPORTANT: synchronize disabled — SQLAlchemy (scoring API) owns the schema.
-        // NestJS reads only. Run `alembic upgrade head` to create/update tables.
-        synchronize: false,
+        // In development: synchronize to auto-create tables.
+        // In production: synchronize disabled — schema owned by Alembic migrations.
+        synchronize: configService.get<string>('NODE_ENV') === 'development',
         logging: configService.get<string>('NODE_ENV') === 'development',
       }),
       inject: [ConfigService],
